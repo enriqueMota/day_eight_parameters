@@ -1,10 +1,10 @@
+from art import logo
+
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
-direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n")
-text = input("Type your message:\n").lower()
-shift = int(input("Type the shift number:\n"))
-
+# TODO-9
+print(logo)
 # region TODO list
 
 # TODO-1: Create a function called 'encrypt' that takes the 'text' and 'shift' as inputs.
@@ -38,6 +38,24 @@ shift = int(input("Type the shift number:\n"))
 # TODO-7: Combine the encrypt() and decrypt() functions into a single function called caesar().
 
 # TODO-8: Call the caesar() function, passing over the 'text', 'shift' and 'direction' values.
+
+# TODO-9: Import and print the logo from art.py when the program starts.
+
+# TODO-10: What if the user enters a shift that is greater than the number of letters in the alphabet?
+# Try running the program and entering a shift number of 45.
+# Add some code so that the program continues to work even if the user enters a shift number greater than 26.
+# Hint: Think about how you can use the modulus (%).
+
+# TODO-11: What happens if the user enters a number/symbol/space?
+# Can you fix the code to keep the number/symbol/space when the text is encoded/decoded?
+#e.g. start_text = "meet me at 3"
+#end_text = "•••• •• •• 3"
+
+# TODO-12: Can you figure out a way to ask the user if they want to restart the cipher program?
+# e.g. Type 'yes' if you want to go again. Otherwise type 'no'.
+# If they type 'yes' then ask them for the direction/text/shift again and call the caesar() function again?
+# Hint: Try creating a while loop that continues to execute the program if the user types 'yes'.
+
 
 # endregion
 
@@ -85,19 +103,46 @@ shift = int(input("Type the shift number:\n"))
 
 # TODO-7
 def caesar(text: str, shift: int, direction: str):
+
     result = ""
     for char in text:
+        # TODO-11
+        if char not in alphabet:
+            result += char
+            continue
+
         char_index = alphabet.index(char)
         if direction == "encode":
+            # TODO-10
             if char_index + shift >= 25:
-                char_index = (char_index + shift) - len(alphabet)
+                char_index = (char_index + shift) % len(alphabet)
                 result += alphabet[char_index]
             else:
                 result += alphabet[char_index + shift]
         elif direction == 'decode':
-            result += alphabet[char_index - shift]
+            # TODO-10
+            if char_index - shift <= -25:
+                char_index = (char_index - shift) % (len(alphabet) * -1)
+                result += alphabet[char_index]
+            else:
+                result += alphabet[char_index - shift]
 
-    print(f"The {direction}d text is {result}")
+    print(f"Here's the {direction}d result: {result}")
 
+continuos_cipher = True
 # TODO-8
-caesar(text, shift, direction)
+# caesar(text, shift, direction)
+# TODO-12
+while continuos_cipher:
+    
+    direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n")
+    text = input("Type your message:\n").lower()
+    shift = int(input("Type the shift number:\n"))
+    # TODO-8
+    caesar(text, shift, direction)
+
+    # TODO-12
+    goes_on = input("Type 'yes' if you want to go again. Otherwise type 'no'.\n").lower()
+    if goes_on == 'no':
+        print("Goodbye!")
+        continuos_cipher = False
